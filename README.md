@@ -6,24 +6,26 @@
 Install-and-start-DeepSeekHarness.cmd
 ```
 
-脚本会把主题安装到原生 DeepSeek Harness，创建桌面快捷方式，并按原生 `launcher\DeepSeek Harness.exe` 方式启动。
+目标电脑不需要预先安装 DeepSeek Harness、Node.js、Git 或 pnpm，也不需要寻找程序目录。安装器会联网下载经过校验的便携 Node.js、固定版本 DeepSeek Harness 和 WebView2 启动依赖，随后安装 Lulu 主题、创建桌面快捷方式并启动。
 
-默认安装目录：
-
-```text
-D:\AI-Coding-Tools\DeepSeek
-```
-
-如果没有自动找到，文件选择窗口会打开。进入“此电脑”，选择实际安装磁盘（支持 C:、D: 等任意磁盘），然后选择：
+默认安装位置：
 
 ```text
-DeepSeek安装目录\launcher\DeepSeek Harness.exe
+D:\DeepSeekHarness
 ```
 
-不要选择桌面、ZIP 解压目录或主题插件目录。安装器也支持命令行传入 Harness 根目录、`launcher` 目录或 `DeepSeek Harness.exe` 完整路径。
+如果电脑没有 D 盘，则自动安装到：
 
-主题来源参考: https://haowallpaper.com/homeView
+```text
+%LOCALAPPDATA%\DeepSeekHarness
+```
 
-主题插件文件位于 `profile-template/web/plugins/dsh-theme-lulu`。已移除“主题静态”按钮，主题只保留动态模式。
+安装器支持重复运行。已下载并安装成功的组件不会重复下载。也可以从 PowerShell 指定位置：
 
-要求 Windows 10/11 x64，并已安装原生 DeepSeek Harness。
+```powershell
+powershell.exe -ExecutionPolicy Bypass -File .\install-to-harness.ps1 -InstallRoot 'E:\DeepSeekHarness'
+```
+
+安装需要 Windows 10/11 x64、可用网络和约 2 GB 可用磁盘空间。首次启动后进入“设置 -> 模型”配置自己的模型提供方。安装包不会收集或上传 API Key、凭据、会话、日志、工作区、附件或自定义主题。
+
+主题插件源文件位于 `profile-template/web/plugins/dsh-theme-lulu`。主题保持动态模式，并包含手机连接入口。
