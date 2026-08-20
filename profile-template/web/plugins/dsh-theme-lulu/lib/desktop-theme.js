@@ -1,5 +1,5 @@
 (()=>{
-if(window.__LULU_SAFE_THEME__)return;window.__LULU_SAFE_THEME__=true;
+if(window.AbortSignal&&!AbortSignal.any){AbortSignal.any=function(signals){const controller=new AbortController();for(const signal of Array.from(signals||[])){if(!signal)continue;if(signal.aborted){controller.abort(signal.reason);break}signal.addEventListener('abort',()=>controller.abort(signal.reason),{once:true})}return controller.signal}}if(window.__LULU_SAFE_THEME__)return;window.__LULU_SAFE_THEME__=true;
 const builtins=[['噜噜欢迎','#f3a51f','🍎🍊🍋🍐🍑🍒'],['红色信念','#d9322d','★✦✧◆'],['果蔬小店','#70a84d','🍃🌿🥕🍅🥝'],['彩虹派对','#d9669a','●○◉◎'],['噜噜房间','#df8c24','✦·✧•'],['办公噜噜','#389ca8','▱▰◇□'],['蜡笔小新','#d9474d','▬▮●▲'],['花野少女','#3798ad','🌸❀✿❁'],['超清噜噜','#e99120','☁◌☁○'],['月白少女','#8e7b9d','❄✦❅✧']].map((item,index)=>({id:'b'+index,name:item[0],accent:item[1],symbols:Array.from(item[2]),url:'/lulu-assets/'+index+'?v=safe1',effect:index}));
 const defaults={opacity:100,blur:0,exposure:100,brightness:100,contrast:100,saturation:100,scale:100,speed:100,volume:0};
 function hiddenBuiltinIds(){try{return new Set(JSON.parse(localStorage.getItem('lulu-hidden-builtins')||'[]').filter(id=>/^b\d+$/.test(id)))}catch{return new Set()}}
