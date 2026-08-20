@@ -1,6 +1,2 @@
-DeepSeek Harness Chrome App Mode Portable 1.0.0
-Harness: @deepseek-ai/dsh 0.1.0-rc.6
-Node.js: 24.19.0 x64 (OpenJS Authenticode signed)
-Android companion: 1.2.1 (versionCode 4)
-Desktop runtime: installed Google Chrome App Mode (not bundled)
-Build architecture: Windows x64
+DeepSeek Harness Lulu Theme Installer
+Version 1.1.0
