@@ -1,0 +1,9 @@
+{
+  "name": "dsh-theme-lulu",
+  "version": "1.0.0",
+  "description": "Portable Lulu theme plugin bundled with DeepSeek Harness Chrome Portable.",
+  "type": "module",
+  "main": "./lib/index.js",
+  "exports": "./lib/index.js",
+  "license": "MIT"
+}
