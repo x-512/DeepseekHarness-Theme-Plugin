@@ -14,7 +14,13 @@ Install-and-start-DeepSeekHarness.cmd
 D:\AI-Coding-Tools\DeepSeek
 ```
 
-如果没有自动找到，在弹窗中选择包含 `launcher\DeepSeek Harness.exe` 的 Harness 文件夹。
+如果没有自动找到，文件选择窗口会打开。进入“此电脑”，选择实际安装磁盘（支持 C:、D: 等任意磁盘），然后选择：
+
+```text
+DeepSeek安装目录\launcher\DeepSeek Harness.exe
+```
+
+不要选择桌面、ZIP 解压目录或主题插件目录。安装器也支持命令行传入 Harness 根目录、`launcher` 目录或 `DeepSeek Harness.exe` 完整路径。
 
 主题来源参考: https://haowallpaper.com/homeView
 
