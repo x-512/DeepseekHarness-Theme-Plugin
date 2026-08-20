@@ -3,7 +3,7 @@
 从 GitHub `Code -> Download ZIP` 下载并解压后，双击：
 
 ```text
-一键安装并打开DeepSeekHarness.cmd
+Install-and-start-DeepSeekHarness.cmd
 ```
 
 脚本会把主题安装到原生 DeepSeek Harness，创建桌面快捷方式，并按原生 `launcher\DeepSeek Harness.exe` 方式启动。
