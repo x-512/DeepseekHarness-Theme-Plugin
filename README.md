@@ -1,6 +1,63 @@
-# Lulu Theme for DeepSeek Harness
+# DeepSeek Harness Lulu Theme Plugin
 
-一个适用于 DeepSeek Harness / DSH Web 的 Cordis 主题插件。它会在 Harness 页面中加入一个永久主题库，支持内置渐变主题、自定义图片主题、自定义视频主题、透明度/虚化/曝光/亮度/对比度/饱和度/缩放/动画速度等参数调节。
+一个给 DeepSeek Harness / DSH Web 使用的主题插件。安装后，打开 DeepSeek Harness 页面会自动出现 `切换主题` 按钮，内置永久主题库，支持自定义图片和视频主题。
+
+## 用户最快使用方式
+
+### 方式一:下载已封装好的 DeepSeek Harness 包
+
+如果仓库 Releases 页面提供了 `DeepSeek-Harness-*-Lulu-Theme.zip`:
+
+1. 下载 zip。
+2. 解压。
+3. 双击启动 DeepSeek Harness。
+4. 打开 Harness 页面后，右上角会自动出现 `切换主题`。
+
+这种方式不需要手动安装插件，主题插件已经封装在 Harness 的 `profile-template/web` 中。
+
+### 方式二:安装到你已有的原生 DeepSeek Harness
+
+下载本仓库后，在 PowerShell 里运行:
+
+```powershell
+cd DeepseekHarness-Theme-Plugin
+.\install-to-harness.ps1 -HarnessRoot "D:\path\to\DeepSeek-Harness-Chrome-Portable"
+```
+
+把 `D:\path\to\DeepSeek-Harness-Chrome-Portable` 换成你的 DeepSeek Harness 根目录。这个目录下面应该能看到:
+
+```text
+app/
+profile-template/
+launcher/
+runtime/
+```
+
+脚本会自动完成两件事:
+
+- 复制主题插件到 `profile-template/web/plugins/dsh-theme-lulu`。
+- 在 `profile-template/web/cordis.patch.yml` 中追加默认挂载项。
+
+安装后启动 DeepSeek Harness，主题会自动加载。
+
+## 已封装的 Harness profile 配置
+
+本仓库包含一个可覆盖到 DeepSeek Harness 的 profile overlay:
+
+```text
+portable-overlay/profile-template/web/plugins/dsh-theme-lulu/
+portable-overlay/profile-template/web/cordis.patch.append.yml
+```
+
+核心 Cordis 挂载配置是:
+
+```yaml
+- insert:
+    - id: lulu-theme
+      name: './plugins/dsh-theme-lulu/lib/index.js'
+```
+
+这表示插件作为 Host 端 Cordis 插件随 Harness Web profile 启动，不需要用户进入插件市场手动安装。
 
 ## 功能
 
@@ -12,36 +69,6 @@
 - 支持跨窗口共享当前主题状态。
 - 支持删除内置主题入口和自定义主题文件。
 - 通过 Cordis `webServer` 服务注入脚本，无需修改 Harness 前端源码。
-
-## 安装
-
-> 这个插件面向 DeepSeek Harness 的 Cordis 运行环境。你需要能编辑自己的 Harness composition / preset，并能安装本 npm 包或本地路径。
-
-### 方式一:从 GitHub 安装
-
-```bash
-npm install github:<your-github-user>/dsh-lulu-theme-plugin
-```
-
-然后在你的 Cordis composition 中加入插件包，例如:
-
-```yaml
-plugins:
-  - package: dsh-theme-lulu
-```
-
-具体字段名可能取决于你当前 Harness 的 composition 写法；核心是加载 npm 包 `dsh-theme-lulu` 暴露的 Cordis 插件。
-
-### 方式二:本地开发安装
-
-```bash
-git clone https://github.com/<your-github-user>/dsh-lulu-theme-plugin.git
-cd dsh-lulu-theme-plugin
-npm install
-npm link
-```
-
-再在 Harness 的 composition 中加载这个本地包。
 
 ## 使用
 
@@ -93,35 +120,25 @@ ${DSH_HOME}/theme-state.json
 - 自定义主题文件只在本地 Harness 数据目录中保存，不会自动上传到第三方服务。
 - 插件会向 Harness 页面注入浏览器脚本，并修改页面样式变量。升级 Harness 后如果 DOM 结构大改，部分 UI 适配可能需要调整。
 
-## 开发
+## 开发者安装
+
+如果你只想把它作为普通 Cordis 插件开发使用，可以加载 npm 包入口:
+
+```yaml
+- id: lulu-theme
+  name: './plugins/dsh-theme-lulu/lib/index.js'
+```
 
 项目结构:
 
 ```text
-lib/index.js          Cordis Host 插件入口
-lib/desktop-theme.js  浏览器主题 UI 和样式注入脚本
-package.json          npm 包信息
-README.md             使用说明
-LICENSE               MIT 许可证
-```
-
-`lib/index.js` 负责注册 HTTP 路由和注入脚本。`lib/desktop-theme.js` 运行在浏览器端，负责主题面板、背景媒体、参数调节和页面样式覆盖。
-
-## 发布到 GitHub
-
-```bash
-git init
-git add .
-git commit -m "Initial Lulu theme plugin"
-gh repo create dsh-lulu-theme-plugin --public --source=. --remote=origin --push
-```
-
-如果没有 GitHub CLI，也可以先创建一个公开仓库，再执行:
-
-```bash
-git remote add origin https://github.com/<your-github-user>/dsh-lulu-theme-plugin.git
-git branch -M main
-git push -u origin main
+lib/index.js                                      Cordis Host 插件入口
+lib/desktop-theme.js                              浏览器主题 UI 和样式注入脚本
+install-to-harness.ps1                            安装到现有 Harness 的脚本
+portable-overlay/profile-template/web/...         可直接叠加到 Harness profile 的覆盖层
+package.json                                      npm 包信息
+README.md                                         使用说明
+LICENSE                                           MIT 许可证
 ```
 
 ## License

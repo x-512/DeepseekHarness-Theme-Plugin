@@ -1,0 +1,9 @@
+{
+  "name": "dsh-theme-lulu",
+  "version": "1.0.0",
+  "description": "Bundled Lulu theme plugin for DeepSeek Harness.",
+  "type": "module",
+  "main": "./lib/index.js",
+  "exports": "./lib/index.js",
+  "license": "MIT"
+}

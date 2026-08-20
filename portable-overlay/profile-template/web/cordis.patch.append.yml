@@ -1,0 +1,6 @@
+
+# Bundle the Lulu theme plugin directly into this DeepSeek Harness profile so it is
+# available by default when the app opens.
+- insert:
+    - id: lulu-theme
+      name: './plugins/dsh-theme-lulu/lib/index.js'
