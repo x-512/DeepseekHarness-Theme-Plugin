@@ -1,7 +1,9 @@
+import { existsSync } from 'node:fs'
 import { mkdir, readFile, readdir, unlink, writeFile } from 'node:fs/promises'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { randomUUID } from 'node:crypto'
+import { execFile } from 'node:child_process'
 
 const pluginDir = dirname(fileURLToPath(import.meta.url))
 const dataRoot = resolve(process.env.DSH_HOME || join(process.cwd(), 'data'))
@@ -39,6 +41,29 @@ const limits = {
   scale: [80, 140],
   speed: [20, 250],
   volume: [0, 100],
+}
+
+function pairingScript() {
+  const candidates = [
+    join(dataRoot, '..', 'mobile', 'tools', 'start-remote-installed.ps1'),
+    'D:\\AI-Coding-Tools\\DeepSeekHarnessElectron\\mobile\\tools\\start-remote-installed.ps1',
+    'D:\\AI-Coding-Tools\\work\\DeepSeekHarnessElectron\\mobile\\tools\\start-remote-installed.ps1',
+  ]
+  return candidates.find((candidate) => requireLikeExists(candidate)) || ''
+}
+function requireLikeExists(path) {
+  return existsSync(path)
+}
+function startPairing() {
+  const script = pairingScript()
+  if (!script) return Promise.reject(new Error('pairing-script-not-found'))
+  const node = process.env.DSH_NODE_PATH || process.execPath
+  return new Promise((resolvePromise, reject) => {
+    execFile('powershell.exe', ['-NoLogo', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', script, '-Node', node], { windowsHide: true }, (error) => {
+      if (error) reject(error)
+      else resolvePromise(true)
+    })
+  })
 }
 
 const json = (res, status, value) => {
@@ -135,6 +160,20 @@ export const name = 'dsh-theme-lulu'
 export const inject = ['webServer']
 
 export function apply(ctx) {
+  ctx.effect(() => ctx.webServer.register({
+    kind: 'exact',
+    path: '/lulu-start-phone-pairing',
+    async handler(req, res) {
+      if (req.method !== 'POST') { json(res, 405, { error: 'method' }); return }
+      try {
+        await startPairing()
+        json(res, 202, { started: true, pairingUrl: 'http://127.0.0.1:3081/remote-pairing' })
+      } catch (error) {
+        json(res, 500, { error: error?.message || 'pairing-start-failed' })
+      }
+    },
+  }), 'lulu phone pairing starter')
+
   ctx.effect(() => ctx.webServer.register({
     kind: 'prefix',
     path: '/lulu-assets',
